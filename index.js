@@ -1,7 +1,7 @@
 const debug = require("debug")("evolvus-docket-client:index");
 const axios=require("axios");
 
-var DOCKET_POST_URL=process.env.DOCKET_POST_URL || "http://localhost:3000/audit";
+var DOCKET_POST_URL=process.env.DOCKET_POST_URL || "http://192.168.1.115:3000/audit";
 
 module.exports.postToDocket=(docketObject)=> {
     return new Promise((resolve,reject)=> {
@@ -11,7 +11,7 @@ module.exports.postToDocket=(docketObject)=> {
             }
             axios.post(DOCKET_POST_URL,docketObject).then((response)=> {
                 debug(`response is ${response}`);
-                resolve(response);
+                resolve(response.data);
             }).catch((e)=> {
                 debug(`exception ${e}`);
                 reject(e);
@@ -21,4 +21,4 @@ module.exports.postToDocket=(docketObject)=> {
             reject(error);
         }
     });
-}
+};
