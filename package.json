@@ -1,0 +1,22 @@
+{
+  "name": "evolvus-docket-client",
+  "version": "0.0.5",
+  "description": "`evolvus-docket-client` acts as a intermediary link between evolvus-docket-server and application.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Evolvus/evolvus-docket-client.git"
+  },
+  "author": "Kavya",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Evolvus/evolvus-docket-client/issues"
+  },
+  "homepage": "https://github.com/Evolvus/evolvus-docket-client#readme",
+  "dependencies": {
+    "axios": "^0.18.0"
+  }
+}
