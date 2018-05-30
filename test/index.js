@@ -1,14 +1,23 @@
 const debug = require("debug")("evolvus-docket-client.test.index");
-
+const mongoose=require("mongoose");
 const chai = require('chai');
 const chaiAsPromised = require("chai-as-promised");
 const expect = chai.expect;
 
-process.env.MONGO_DB_URL = "mongodb://localhost:27017/TestDocket";
+var MONGO_DB_URL=process.env.MONGO_DB_URL || "mongodb://localhost:27017/TestDocket";
+process.env.DOCKET_POST_URL = "http://192.168.1.115:3000/audit";
 
 let index=require("../index");
 
 describe('testing postToDocket method', () => {
+
+  before((done)=> {
+    mongoose.connect(MONGO_DB_URL);
+    let connection = mongoose.connection;
+    connection.once("open", () => {
+      done();
+    });
+  });
 
     let auditEvent = {
         name: 'loginEvent',
