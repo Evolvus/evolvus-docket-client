@@ -5,7 +5,7 @@ const chaiAsPromised = require("chai-as-promised");
 const expect = chai.expect;
 
 var MONGO_DB_URL=process.env.MONGO_DB_URL || "mongodb://localhost:27017/TestDocket";
-process.env.DOCKET_POST_URL = "http://192.168.1.115:3000/audit";
+process.env.DOCKET_POST_URL = "http://localhost:3000/audit";
 
 let index=require("../index");
 
