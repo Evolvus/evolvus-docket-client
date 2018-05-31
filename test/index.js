@@ -1,42 +1,76 @@
 const debug = require("debug")("evolvus-docket-client.test.index");
-const mongoose=require("mongoose");
 const chai = require('chai');
 const chaiAsPromised = require("chai-as-promised");
 const expect = chai.expect;
 
-var MONGO_DB_URL=process.env.MONGO_DB_URL || "mongodb://localhost:27017/TestDocket";
-process.env.DOCKET_POST_URL = "http://localhost:3000/audit";
+chai.use(chaiAsPromised);
 
 let index=require("../index");
 
 describe('testing postToDocket method', () => {
+  let auditEvent = {
+    name: 'loginEvent',
+    createdBy: 'kavyak',
+    application: 'CDA',
+    source: 'loginPage',
+    ipAddress: '127.0.0.1',
+    level: 'info',
+    status: 'SUCCESS',
+    eventDateTime: new Date().toISOString(),
+    details: '{ user: "kavya" }',
+    keywords: 'login CDA',
+    keyDataAsJSON: "keydata"
+  };
+  let invalidDocket={
+    name: 'loginEvent',
+    createdBy: 'kavyak',
+    application: 123,
+    source: 'loginPage',
+    ipAddress: '127.0.0.1',
+    level: 'info',
+    status: 'SUCCESS',
+    eventDateTime: new Date().toISOString(),
+    details: '{ user: "kavya" }',
+    keywords: 'login CDA',
+    keyDataAsJSON: "keydata"
+  };
 
-  before((done)=> {
-    mongoose.connect(MONGO_DB_URL);
-    let connection = mongoose.connection;
-    connection.once("open", () => {
+
+  describe("testing with docket objects",()=> {
+    beforeEach((done)=> {
+      process.env.DOCKET_POST_URL = "http://localhost:3000/audit";
       done();
     });
-  });
-
-    let auditEvent = {
-        name: 'loginEvent',
-        createdBy: 'kavyak',
-        application: 'CDA',
-        source: 'loginPage',
-        ipAddress: '127.0.0.1',
-        level: 'info',
-        status: 'SUCCESS',
-        eventDateTime: new Date().toISOString(),
-        details: '{ user: "kavya" }',
-        keywords: 'login CDA',
-        keyDataAsJSON: "keydata"
-      };
 
     it('should save valid object to database', (done) => {
-     var res=index.postToDocket(auditEvent);
-     expect(res)
-     .to.be.eventually.include(auditEvent)
-     .notify(done);
+    var res=index.postToDocket(auditEvent);
+    expect(res)
+    .to.be.eventually.include(auditEvent)
+    .notify(done);
+    });
+
+    it('should respond with status code 400 if docketObject is invalid', (done) => {
+      var res=index.postToDocket(invalidDocket);
+      expect(res)
+      .to.be.fulfilled.then((resp)=> {
+        expect(resp.response.status).to.be.equal(400);
+        done();
+      });
+    });
+    });
+
+  describe("testing when the server is down",()=> {
+    beforeEach((done)=> {
+      process.env.DOCKET_POST_URL = "http://localhost:4000/audit";
+      done();
+    });
+
+    it('should respond with status code 400 if docket server is down', (done) => {
+      var res=index.postToDocket(auditEvent);
+      expect(res).to.be.fulfilled.then((resp)=> {
+        expect(resp.code).to.be.equal('ECONNREFUSED');
+        done();
+      });
+     });
     });
   });
