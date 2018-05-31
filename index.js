@@ -10,8 +10,8 @@ module.exports.postToDocket=(docketObject)=> {
         try {
             var DOCKET_POST_URL=process.env.DOCKET_POST_URL || "http://localhost:3000/audit";
             if(docketObject==null) {
-                debug("IllegalArgument:Object is null/undefined");
-                resolve("IllegalArgument:Object is null/undefined");
+                debug(`IllegalArgument:Object is ${docketObject}`);
+                resolve(`IllegalArgument:Object is ${docketObject}`);
             }
             var instance = axios.create({
                 baseURL: DOCKET_POST_URL,
@@ -19,14 +19,14 @@ module.exports.postToDocket=(docketObject)=> {
               });
             
             instance.post(DOCKET_POST_URL,docketObject).then((response)=> {
-                debug(`response is ${response}`);
+                debug(`response is ${response} and audit is ${docketObject}`);
                 resolve(response.data);
             }).catch((error)=> {
-                    debug(`Error:${error}`);
-                    resolve(error);
+                debug(`Error:${error} and audit which is failed to store ${docketObject}`);
+                resolve(error);
             });
         } catch (error) {
-            debug(`caught exception ${error}`);
+            debug(`caught exception ${error} and audit which is failed to store ${docketObject}`);
             resolve(error);
         }
     });
