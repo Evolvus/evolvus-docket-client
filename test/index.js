@@ -35,7 +35,6 @@ describe('testing postToDocket method', () => {
     keyDataAsJSON: "keydata"
   };
 
-
   describe("testing with docket objects",()=> {
     beforeEach((done)=> {
       process.env.DOCKET_POST_URL = "http://localhost:3000/audit";
@@ -53,9 +52,24 @@ describe('testing postToDocket method', () => {
       var res=index.postToDocket(invalidDocket);
       expect(res)
       .to.be.fulfilled.then((resp)=> {
-        expect(resp.response.status).to.be.equal(400);
+        expect(resp).to.include(invalidDocket);
         done();
       });
+    });
+
+    it('should be resolved with IllegalArgument when input object is null', (done) => {
+      var res=index.postToDocket(null);
+      expect(res)
+      .to.be.eventually.include("IllegalArgument")
+      .notify(done);
+    });
+
+    it('should be resolved with IllegalArgument when input object is undefined', (done) => {
+      let input;
+      var res=index.postToDocket(input);
+      expect(res)
+      .to.be.eventually.include("IllegalArgument")
+      .notify(done);
     });
   });
 
@@ -68,7 +82,7 @@ describe('testing postToDocket method', () => {
     it('should respond with connection refused if docket server is down', (done) => {
       var res=index.postToDocket(auditEvent);
       expect(res).to.be.fulfilled.then((resp)=> {
-        expect(resp.code).to.be.equal('ECONNREFUSED');
+        expect(resp).to.include(auditEvent);
         done();
       });
     });
