@@ -15,17 +15,17 @@ module.exports.postToDocket=(docketObject)=> {
             var instance = axios.create({
                 baseURL: DOCKET_POST_URL,
                 timeout: TIME_OUT
-              });
+            });
             
             instance.post(DOCKET_POST_URL,docketObject).then((response)=> {
-                debug(`response is ${response} and audit is ${docketObject}`);
+                debug("response is",response.data);
                 resolve(response.data);
-            }).catch((error)=> {
-                debug(`Error:${error} and audit which is failed to store ${docketObject}`);
-                resolve(error);
+            }).catch((error)=> { 
+                debug(`Error:${error} and audit failed to store is`,docketObject);
+                resolve(docketObject);
             });
         } catch (error) {
-            debug(`caught exception ${error} and audit which is failed to store ${docketObject}`);
+            debug(`caught exception ${error} and audit failed to store is`,docketObject);
             resolve(error);
         }
     });
