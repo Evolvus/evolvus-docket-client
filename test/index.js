@@ -9,16 +9,16 @@ let index=require("../index");
 
 describe('testing postToDocket method', () => {
   let auditEvent = {
-    name: 'loginEvent',
+    name: 'TESTING_DOCKET',
     createdBy: 'kavyak',
-    application: 'CDA',
-    source: 'loginPage',
+    application: 'APPLICATION',
+    source: 'application',
     ipAddress: '127.0.0.1',
     level: 'info',
     status: 'SUCCESS',
     eventDateTime: new Date().toISOString(),
     details: '{ user: "kavya" }',
-    keywords: 'login CDA',
+    keywords: 'login application',
     keyDataAsJSON: "keydata"
   };
   let invalidDocket={
@@ -57,7 +57,7 @@ describe('testing postToDocket method', () => {
         done();
       });
     });
-    });
+  });
 
   describe("testing when the server is down",()=> {
     beforeEach((done)=> {
@@ -65,12 +65,12 @@ describe('testing postToDocket method', () => {
       done();
     });
 
-    it('should respond with status code 400 if docket server is down', (done) => {
+    it('should respond with connection refused if docket server is down', (done) => {
       var res=index.postToDocket(auditEvent);
       expect(res).to.be.fulfilled.then((resp)=> {
         expect(resp.code).to.be.equal('ECONNREFUSED');
         done();
       });
-     });
     });
   });
+});

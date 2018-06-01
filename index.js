@@ -1,7 +1,6 @@
 const debug = require("debug")("evolvus-docket-client:index");
 const axios=require("axios");
 
-
 var TIME_OUT=process.env.TIME_OUT || 5000;
 
 module.exports.postToDocket=(docketObject)=> {
