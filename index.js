@@ -58,3 +58,18 @@ module.exports.postToDocket = (docketObject) => {
     }
   });
 };
+
+module.exports.audit = {
+  application: "",
+  name: "",
+  eventCode: "",
+  source: "",
+  ipAddress: "",
+  level: "",
+  status: "",
+  eventDateTime: "",
+  details: "",
+  keyDataAsJSON: "",
+  createdBy: "",
+  keywords: ""
+};
